@@ -1,0 +1,24 @@
+# Postgres
+pg_ctl -D /usr/local/var/postgres start
+psql -U postgres
+
+CREATE USER airflow WITH PASSWORD <password>;
+ALTER USER airflow WITH SUPERUSER;
+CREATE DATABASE airflow;
+GRANT ALL PRIVILEGES ON DATABASE airflow TO airflow;
+CREATE SCHEMA airflow;
+ALTER ROLE airflow SET search_path = airflow, public;
+
+# Docker
+docker rm -vf $(docker ps -a -q)
+docker rmi -f $(docker images -a -q)
+
+docker build -t harvest_airflow .
+docker run -it --rm -p 8080:8080 --env-file airflow.env --volume /Users/spniemansburg/Desktop/masterclass/data:/data_share harvest_airflow
+
+# Find ip
+ifconfig (Mac)
+ipconfig (Windows)
+
+# RIVM
+https://data.rivm.nl/covid-19/COVID-19_vaccinatiegraad_per_gemeente_per_week_leeftijd.json
